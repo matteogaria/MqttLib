@@ -5,18 +5,17 @@ namespace MqttLib.HomeAssistant
 {
     public class LightComponent : HassEntity
     {
-        private readonly bool brightness;
+        public bool HasBrightness { get; set; }
 
-        public LightComponent(MqttService mqtt, HassDeviceDescriptor device, HassEntityDescriptor entity, HassComponent component, bool brightness) : base(mqtt, device, entity, component)
+        public LightComponent(MqttService mqtt, HassDeviceDescriptor device, HassEntityDescriptor entity, HassComponent component) : base(mqtt, device, entity, component)
         {
             SubscribeSubTopic("toggle", (_) => OnToggle?.Invoke());
-            this.brightness = brightness;
         }
 
-        public event Action<bool, int> OnSetReceived;
+        public event Action<bool, int?> OnSetReceived;
         public event Action OnToggle;
 
-        public void SetState(bool state, int brightness)
+        public void SetState(bool state, int? brightness)
         {
             LightMessage message = new LightMessage
             {
@@ -31,13 +30,13 @@ namespace MqttLib.HomeAssistant
         {
             return new BrightnessLightDiscoveryMessage
             {
-                Brightness = brightness
+                Brightness = HasBrightness
             };
         }
         protected override void OnSet(string payload)
         {
             LightMessage message = JsonConvert.DeserializeObject<LightMessage>(payload);
-            OnSetReceived?.Invoke(message.On, message.Brightness ?? 255);
+            OnSetReceived?.Invoke(message.On, message.Brightness);
             SetState(payload);
         }
 
