@@ -26,7 +26,7 @@ namespace MqttLib.Demo
                 Name = "mqtt lib sample device",
                 SoftwareVersion = "0.0.1"
             };
-            HassEntity entity = new HassEntity(
+            LightComponent entity = new LightComponent(
                 service,
                 device,
                 new HassEntityDescriptor
@@ -36,7 +36,10 @@ namespace MqttLib.Demo
                     Publish = true,
                     Route = "mqttlib/sample"
                 },
-                HassComponent.light);
+                HassComponent.light,
+                brightness: true);
+
+            entity.PublishDiscovery("homeassistant");
 
             Console.ReadLine();
 

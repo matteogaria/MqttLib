@@ -6,7 +6,7 @@ namespace MqttLib.HomeAssistant
     {
         private readonly HassComponent component;
 
-        public HassEntity(MqttService mqtt, HassDeviceDescriptor device, HassEntityDescriptor entity, HassComponent component, string discoveryTopic = "homeassistant") : base(mqtt, entity.Route)
+        public HassEntity(MqttService mqtt, HassDeviceDescriptor device, HassEntityDescriptor entity, HassComponent component) : base(mqtt, entity.Route)
         {
             Device = device;
             Entity = entity;
@@ -16,9 +16,6 @@ namespace MqttLib.HomeAssistant
                 log.Info($"Set msg: {p}");
                 OnSet(p);
             });
-
-            if (entity.Publish)
-                PublishDiscovery(discoveryTopic);
         }
 
         public HassDeviceDescriptor Device { get; }
@@ -31,7 +28,7 @@ namespace MqttLib.HomeAssistant
             message.UniqueId = Entity.EntityId;
             message.CommandTopic = $"{Entity.Route}/set";
             message.StateTopic = $"{Entity.Route}/state";
-            // message.Schema = "json";
+            message.Schema = "json";
 
             message.Device = Device;
 
