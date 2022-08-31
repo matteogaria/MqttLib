@@ -1,5 +1,6 @@
 ﻿using MqttLib.HomeAssistant;
 using MQTTnet.Extensions.ManagedClient;
+using System;
 
 namespace MqttLib.Demo
 {
@@ -26,22 +27,55 @@ namespace MqttLib.Demo
                 Name = "mqtt lib sample device",
                 SoftwareVersion = "0.0.1"
             };
-            LightComponent entity = new LightComponent(
+
+            SampleLight light = new SampleLight(
                 service,
-                device,
                 new HassEntityDescriptor
                 {
-                    EntityId = "mqttLib_sample_",
-                    Name = "mqttlib sample ",
-                    Publish = true,
-                    Route = "mqttlib/sample"
-                },
-                HassComponent.light,
-                brightness: true);
+                    EntityId = "mqttLib_sample_light",
+                    Name = "mqttlib sample light",
+                    Route = "mqttlib/sample",
+                    Device = device
+                });
 
-            entity.PublishDiscovery("homeassistant");
+            light.HasBrightness = false;
+            light.PublishDiscovery("homeassistant");
 
-            Console.ReadLine();
+            SampleLight lightWithBrightness = new SampleLight(
+                service,
+                new HassEntityDescriptor
+                {
+                    EntityId = "mqttLib_sample_brightnesslight",
+                    Name = "mqttlib sample brightnesslight ",
+                    Route = "mqttlib/sample",
+                    Device = device
+                });
+
+            lightWithBrightness.HasBrightness = true;
+            lightWithBrightness.PublishDiscovery("homeassistant");
+            bool run = true;
+            while (run)
+            {
+                ConsoleKey k = Console.ReadKey().Key;
+                switch(k)
+                {
+                    case ConsoleKey.Q:
+                        run = false;
+                        break;
+                    case ConsoleKey.D1:
+                        light.Toggle();
+                        break;
+                    case ConsoleKey.D2:
+                        lightWithBrightness.Toggle();
+                        break;
+                    case ConsoleKey.D3:
+                        lightWithBrightness.SetState(lightWithBrightness.State, lightWithBrightness.Brightness - 5);
+                        break;
+                    case ConsoleKey.D4:
+                        lightWithBrightness.SetState(lightWithBrightness.State, lightWithBrightness.Brightness + 5);
+                        break;
+                }
+            }
 
         }
     }

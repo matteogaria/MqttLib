@@ -7,7 +7,7 @@ namespace MqttLib.HomeAssistant
     {
         private readonly HassComponent component;
 
-        public HassEntity(MqttService mqtt, HassEntityDescriptor entity, HassComponent component) : base(mqtt, entity.Route)
+        public HassEntity(MqttService mqtt, HassEntityDescriptor entity, HassComponent component) : base(mqtt, $"{entity.Route}/{entity.EntityId}")
         {
             if (entity == null || entity.Device == null)
                 throw new ArgumentException("Entity and Entity.Device cannot be null", nameof(entity));
@@ -28,8 +28,8 @@ namespace MqttLib.HomeAssistant
             DiscoveryMessage message = GetDiscoveryMessage();
             message.Name = Entity.Name;
             message.UniqueId = Entity.EntityId;
-            message.CommandTopic = $"{Entity.Route}/set";
-            message.StateTopic = $"{Entity.Route}/state";
+            message.CommandTopic = $"{Entity.Route}/{Entity.EntityId}/set";
+            message.StateTopic = $"{Entity.Route}/{Entity.EntityId}/state";
             message.Schema = "json";
 
             message.Device = Entity.Device;
