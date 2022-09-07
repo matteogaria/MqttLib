@@ -1,23 +1,36 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+
+using Newtonsoft.Json;
 
 namespace MqttLib.HomeAssistant
 {
     public class HassEntity : MqttEntity
     {
         private readonly HassComponent component;
-
-        public HassEntity(MqttService mqtt, HassEntityDescriptor entity, HassComponent component) : base(mqtt, $"{entity.Route}/{entity.EntityId}")
+        public string BaseTopic { get; }
+        public string CommandTopic { get; }
+        public string StateTopic { get; }
+        public HassEntity(MqttService mqtt, HassEntityDescriptor entity, HassComponent component) : base(mqtt)
         {
             if (entity == null || entity.Device == null)
                 throw new ArgumentException("Entity and Entity.Device cannot be null", nameof(entity));
 
+            BaseTopic = $"{entity.Route}/{entity.EntityId}";
+            CommandTopic = BaseTopic + "/set";
+            StateTopic = BaseTopic + "/state";
+
             Entity = entity;
             this.component = component;
-            SubscribeSubTopic("set", (p) =>
+            SubscribeTopic(CommandTopic, (p) =>
             {
                 log.Info($"Set msg: {p}");
                 OnSet(p);
+            });
+
+            SubscribeTopic(StateTopic, (p) =>
+            {
+                log.Info($"State msg: {p}");
+                OnState(p);
             });
         }
 
@@ -28,8 +41,8 @@ namespace MqttLib.HomeAssistant
             DiscoveryMessage message = GetDiscoveryMessage();
             message.Name = Entity.Name;
             message.UniqueId = Entity.EntityId;
-            message.CommandTopic = $"{Entity.Route}/{Entity.EntityId}/set";
-            message.StateTopic = $"{Entity.Route}/{Entity.EntityId}/state";
+            message.CommandTopic = CommandTopic;
+            message.StateTopic = StateTopic;
             message.Schema = "json";
 
             message.Device = Entity.Device;
@@ -49,8 +62,9 @@ namespace MqttLib.HomeAssistant
                 };
         }
 
-        protected void PublishState(string payload) => PublishEntityMessage("state", payload);
+        protected void PublishState(string payload) => PublishMessage(StateTopic, payload);
         protected virtual DiscoveryMessage GetDiscoveryMessage() => new();
         protected virtual void OnSet(string payload) { }
+        protected virtual void OnState(string payload) { }
     }
 }

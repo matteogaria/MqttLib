@@ -1,6 +1,7 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Text;
+
+using NLog;
 
 namespace MqttLib
 {
@@ -9,18 +10,16 @@ namespace MqttLib
         protected static readonly Logger log = LogManager.GetCurrentClassLogger();
 
         protected MqttService Mqtt { get; }
-        public string Topic { get; }
 
-        public MqttEntity(MqttService mqtt, string topic)
+        public MqttEntity(MqttService mqtt)
         {
             Mqtt = mqtt;
-            Topic = topic;
         }
 
-        protected void SubscribeSubTopic(string subTopic, Action<string> callback)
-            => Mqtt.Register($"{Topic}/{subTopic}", (payload) => callback?.Invoke(Encoding.UTF8.GetString(payload))).Wait();
+        protected void SubscribeTopic(string topic, Action<string> callback)
+           => Mqtt.Register(topic, (payload) => callback?.Invoke(Encoding.UTF8.GetString(payload))).Wait();
 
-        protected void PublishEntityMessage(string subTopic, string content)
-            => Mqtt.PublishMessage($"{Topic}/{subTopic}", content);
+        protected void PublishMessage(string topic, string content)
+            => Mqtt.PublishMessage(topic, content);
     }
 }

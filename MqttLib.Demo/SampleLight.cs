@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 
 namespace MqttLib.HomeAssistant
@@ -14,7 +13,7 @@ namespace MqttLib.HomeAssistant
 
         public SampleLight(MqttService mqtt, HassEntityDescriptor entity) : base(mqtt, entity, HassComponent.light)
         {
-            SubscribeSubTopic("toggle", (_) => Toggle());
+            SubscribeTopic(BaseTopic + "/toggle", (_) => Toggle());
         }
 
         public void Toggle() => SetState(!State, null);
