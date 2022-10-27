@@ -22,6 +22,6 @@ namespace MqttLib.HomeAssistant
         }
 
         public void PublishValue(double value)
-            => PublishState($"state={value}");
+            => PublishState(value.ToString("0.##"));
     }
 }
