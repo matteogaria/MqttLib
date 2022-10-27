@@ -1,0 +1,69 @@
+﻿
+namespace MqttLib.HomeAssistant
+{
+    public enum HassComponent
+    {
+
+        alarm_control_panel,
+        binary_sensor,
+        button,
+        camera,
+        climate,
+        cover,
+        device_automation,
+        device_tracker,
+        fan,
+        humidifier,
+        light,
+        lock_,
+        number,
+        scene,
+        siren,
+        select,
+        sensor,
+        switch_,
+        tag,
+        vacuum
+    }
+
+    public enum HassDeviceClass
+    {
+        none,
+        apparent_power,
+        aqi,
+        battery,
+        carbon_dioxide,
+        carbon_monoxide,
+        current,
+        date,
+        distance,
+        duration,
+        energy,
+        frequency,
+        gas,
+        humidity,
+        illuminance,
+        moisture,
+        monetary,
+        nitrogen_dioxide,
+        nitrogen_monoxide,
+        nitrous_oxide,
+        ozone,
+        pm1,
+        pm10,
+        pm25,
+        power_factor,
+        power,
+        pressure,
+        reactive_power,
+        signal_strength,
+        speed,
+        sulphur_dioxide,
+        temperature,
+        timestamp,
+        volatile_organic_compounds,
+        voltage,
+        volume,
+        weight
+    }
+}
