@@ -23,13 +23,13 @@ namespace MqttLib.HomeAssistant
             this.component = component;
             SubscribeTopic(CommandTopic, (p) =>
             {
-                log.Info($"Set msg: {p}");
+                log.Debug($"Set msg: {p}");
                 OnSet(p);
             });
 
             SubscribeTopic(StateTopic, (p) =>
             {
-                log.Info($"State msg: {p}");
+                log.Debug($"State msg: {p}");
                 OnState(p);
             });
         }
