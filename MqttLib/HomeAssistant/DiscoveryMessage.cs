@@ -46,4 +46,16 @@ namespace MqttLib.HomeAssistant
         [JsonProperty("state_class")]
         public string StateClass { get; set; }
     }
+
+    public class AlarmPanelDiscoveryMessage : DiscoveryMessage
+    {
+        [JsonProperty("code")]
+        public string? Code { get; set; }
+        [JsonProperty("command_template")]
+        public string? CommandTemplate { get; set; }
+        [JsonProperty("code_arm_required")]
+        public bool? CodeArmRequired { get; set; }
+        [JsonProperty("code_disarm_required")]
+        public bool? CodeDisarmRequired { get; set; }
+    }
 }
