@@ -50,9 +50,9 @@ namespace MqttLib.HomeAssistant
     public class AlarmPanelDiscoveryMessage : DiscoveryMessage
     {
         [JsonProperty("code")]
-        public string? Code { get; set; }
+        public string Code { get; set; }
         [JsonProperty("command_template")]
-        public string? CommandTemplate { get; set; }
+        public string CommandTemplate { get; set; }
         [JsonProperty("code_arm_required")]
         public bool? CodeArmRequired { get; set; }
         [JsonProperty("code_disarm_required")]
