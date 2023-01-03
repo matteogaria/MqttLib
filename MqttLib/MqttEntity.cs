@@ -19,7 +19,7 @@ namespace MqttLib
         protected void SubscribeTopic(string topic, Action<string> callback)
            => Mqtt.Register(topic, (payload) => callback?.Invoke(Encoding.UTF8.GetString(payload))).Wait();
 
-        protected void PublishMessage(string topic, string content)
-            => Mqtt.PublishMessage(topic, content);
+        protected void PublishMessage(string topic, string content, bool retain = false)
+            => Mqtt.PublishMessage(topic, content, retain);
     }
 }

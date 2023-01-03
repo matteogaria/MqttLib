@@ -62,7 +62,7 @@ namespace MqttLib.HomeAssistant
                 };
         }
 
-        protected void PublishState(string payload) => PublishMessage(StateTopic, payload);
+        protected void PublishState(string payload) => PublishMessage(StateTopic, payload, true);
         protected virtual DiscoveryMessage GetDiscoveryMessage() => new();
         protected virtual void OnSet(string payload) { }
         protected virtual void OnState(string payload) { }
