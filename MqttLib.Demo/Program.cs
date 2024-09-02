@@ -11,9 +11,9 @@ namespace MqttLib.Demo
             IManagedMqttClient mqtt = MqttService.CreateClient(new MqttBrokerConfiguration
             {
                 ClientId = "mqttLib.Demo",
-                IpAddress = "10.39.24.50",
-                Password = "device",
-                Username = "device",
+                IpAddress = "10.39.24.10",
+                Password = "esphome",
+                Username = "esphome",
                 ReconnectDelay = 5000
             });
 
@@ -41,18 +41,17 @@ namespace MqttLib.Demo
             light.HasBrightness = false;
             light.PublishDiscovery("homeassistant");
 
-            SampleLight lightWithBrightness = new SampleLight(
+            SampleFan fan = new SampleFan(
                 service,
                 new HassEntityDescriptor
                 {
-                    EntityId = "mqttLib_sample_brightnesslight",
-                    Name = "mqttlib sample brightnesslight ",
-                    Route = "mqttlib/sample",
+                    EntityId = "mqttlib_sample_fan",
+                    Name = "mqttlib samble fan",
+                    Route = "mqttlib/fan",
                     Device = device
                 });
+            fan.PublishDiscovery("homeassistant");
 
-            lightWithBrightness.HasBrightness = true;
-            lightWithBrightness.PublishDiscovery("homeassistant");
             bool run = true;
             while (run)
             {
@@ -66,13 +65,7 @@ namespace MqttLib.Demo
                         light.Toggle();
                         break;
                     case ConsoleKey.D2:
-                        lightWithBrightness.Toggle();
-                        break;
-                    case ConsoleKey.D3:
-                        lightWithBrightness.SetState(lightWithBrightness.State, lightWithBrightness.Brightness - 5);
-                        break;
-                    case ConsoleKey.D4:
-                        lightWithBrightness.SetState(lightWithBrightness.State, lightWithBrightness.Brightness + 5);
+                        fan.Toggle();
                         break;
                 }
             }
